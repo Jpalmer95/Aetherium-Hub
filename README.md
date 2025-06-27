@@ -28,34 +28,37 @@ Aetherium Studio
            * Audio Prompting: Text input for generating music and sound effects.
            * Environment Prompting: Text/parameter input for landscape generation.
        * Workflow Manager: A node-based or step-by-step UI to chain operations together (e.g., Prompt Mesh -> Auto-Rig -> Apply
-         Animation -> Export to Godot).
+         Animation -> Export to Godot). This manager will also support integration with ComfyUI workflows, allowing users to
+         incorporate complex image and video processing pipelines. An AI-powered "Workflow Building Agent" will assist users by
+         suggesting nodes, translating natural language to workflow steps, and helping configure parameters.
 
 
    2. The Core (Backend): A Python (FastAPI/Flask) server that acts as the brains of the operation.
-       * API Gateway: Manages all external API calls to Hugging Face Spaces, Suno, etc. Securely stores API keys.
-       * Job Queue: Manages long-running tasks like 3D rendering, rigging, and scene generation. This is crucial so the UI remains
-         responsive.
-       * File & Database Management: Stores project data, asset metadata, and handles file I/O, ensuring all assets are correctly
-         versioned and stored.
-       * The "Agent" Controller: Dispatches tasks to specialized "Worker" scripts.
+       * API Gateway: Manages all external API calls to Hugging Face Spaces, Suno, etc., securely storing API keys. This gateway
+         will also be enhanced to serve as an "MCP (Multi-Creator Protocol) Server," exposing a secure API (e.g., REST/GraphQL
+         with API key/OAuth2 authentication) for external agents or applications to submit jobs and manage assets. This enables
+         broader integration and utilization of Aetherium's capabilities.
+       * Job Queue: Manages long-running tasks like 3D rendering, rigging, ComfyUI pipeline execution, and scene generation. This
+         is crucial so the UI remains responsive.
+       * File & Database Management:
+           * Metadata: Stores project data, asset metadata, version history, and user settings in a relational database
+             (PostgreSQL recommended, SQLite for local/desktop use).
+           * Binary Assets: Manages large binary files (meshes, textures, audio, video, etc.) through a structured local file
+             system (e.g., `PROJECT_ROOT/aetherium_assets/`) and/or cloud storage solutions (e.g., AWS S3, Google Cloud
+             Storage) for scalability and collaboration. This includes basic versioning for assets.
+       * The "Agent" Controller: Dispatches tasks to specialized "Worker" scripts based on the job type.
 
 
    3. The Agents & Workers (Automation Layer): These are not a single AI, but a collection of specialized, headless scripts that
-      Aetherium Core calls upon.
-       * Blender Worker (`bpy`): The primary workhorse for 3D tasks. Aetherium will run Blender from the command line to execute
-         Python scripts for:
-           * Importing: Bringing in the raw meshes from the generation APIs.
-           * Cleaning: Running mesh cleanup, decimation, and optimization routines.
-           * Auto-Rigging: Using AI-assisted plugins or heuristics to generate a basic character rig.
-           * Animation: Applying animations (e.g., from a library like Mixamo, or future AI animation models).
-           * Exporting: Saving the final, processed asset as a clean .glb file.
-       * Landscaping Worker:
-           * Uses AI (e.g., a custom-trained Stable Diffusion model) to generate heightmaps, splat maps (for textures), and
-             foliage maps based on a prompt.
-           * These maps can then be fed into Blender's Geometry Nodes or Godot's terrain system by a worker script to procedurally
-             build the base environment.
-       * Engine-Specific Workers: Scripts that can interact with the project files of Godot, Unity, etc., to automatically place
-         exported assets or set up materials.
+      Aetherium Core calls upon. This layer is designed to be extensible for new tools and modalities.
+       * Blender Worker (`bpy`): The primary workhorse for 3D tasks (importing, cleaning, rigging, animation, exporting).
+       * ComfyUI Worker: Executes ComfyUI workflows (JSON-defined graphs) by programmatically running a ComfyUI instance or
+         calling its API, managing inputs and outputs.
+       * Landscaping Worker: Generates terrain components (heightmaps, splat maps) using AI models, which can then be used by
+         Blender or game engines.
+       * Engine-Specific Workers: Scripts for direct interaction with game engine project files (Godot, Unity, etc.).
+       * Future Workers: This layer can be expanded with workers for video processing (e.g., using `ffmpeg`, AI video models),
+         advanced audio manipulation, text generation, and more.
 
   ---
 
@@ -118,12 +121,18 @@ Aetherium Studio
   Text/Image-to-3D Mesh Generation                                     |
   | Audio Generation  | Suno API, AudioCraft (Hugging Face)                                                            | Music
   and Sound Effect Generation                                    |
+  | Image/Video       | ComfyUI                                                                                        |
+  Flexible image and video processing via node-based workflows     |
   | 3D Manipulation   | Blender (headless) with Python (`bpy`)                                                         | The
   primary tool for rigging, animation, and procedural modeling     |
   | Game Engines      | Godot, Unity, Unreal Engine, Blender                                                     | Final targets
   for the generated assets                               |
-  | Database          | SQLite or PostgreSQL                                                                           | Storing
-  project metadata, asset info, and user settings
+  | Database          | PostgreSQL (primary), SQLite (local option)                                                    | Storing
+  project metadata, asset info, user settings                  |
+  | Asset Storage     | Local File System, AWS S3 (or other cloud providers)                                           | Storing
+  large binary assets (models, textures, audio, video)       |
+  | AI Assistance     | LLM Integration (e.g., OpenAI API, Hugging Face Models)                                        | Powering
+  Workflow Building Agent, natural language interactions       |
 
 
 
