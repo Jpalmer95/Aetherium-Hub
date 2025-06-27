@@ -1,7 +1,9 @@
 Aetherium Hub, by Jonathan Korstad
  - Aetherium Hub contains Aetherium Studio, plus future expansions and tools for generating and precise control over next gen games, media, immersive experiences, and more.
 
-Project Concept: "Aetherium Studio"
+!! WIP !!
+
+Aetherium Studio
 
 
   Aetherium Studio is not a new game engine, but a unified development environment and asset pipeline manager. It acts as a
