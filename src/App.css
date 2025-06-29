@@ -1,38 +1,400 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App-header {
+  background-color: #1c1f26;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+main {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex; /* Will be used for layout with sidebar */
+}
+
+/* Basic styles for components we'll create */
+.Layout {
+  display: flex;
+  width: 100%;
+}
+
+.Sidebar {
+  width: 250px;
+  min-width: 200px;
+  background-color: #20232a;
+  padding: 20px;
+  margin-right: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.Sidebar h2 {
+  margin-top: 0;
+  font-size: 1.4em;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.ContentArea {
+  flex-grow: 1;
+  background-color: #20232a;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.AssetLibrary ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.AssetLibrary li {
+  background-color: #282c34;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #3a3f4b;
+  transition: background-color 0.2s ease;
+}
+
+.AssetLibrary li:hover {
+  background-color: #3a3f4b;
+}
+
+.AssetLibrary li.selected {
+  background-color: #007bff;
+  border-color: #0056b3;
+  color: white;
+}
+
+.FileUpload form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.FileUpload label {
+  font-weight: bold;
+}
+
+.FileUpload input[type="text"],
+.FileUpload input[type="file"],
+.FileUpload select,
+.FileUpload button {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #282c34;
+  color: white;
+}
+
+.FileUpload input[type="text"]::placeholder {
+  color: #aaa;
+}
+
+.FileUpload button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.FileUpload button:hover {
+  background-color: #0056b3;
+}
+
+.ErrorMessage {
+  color: #ff4d4f;
+  background-color: #40191a;
+  border: 1px solid #ff4d4f;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.TransformControls {
+  background-color: #2a2f3a; /* Slightly different from sidebar for distinction */
+  padding: 15px;
+  border-left: 1px solid #1c1f26;
+  color: #e0e0e0;
+  font-size: 0.9em;
+}
+
+.TransformControls h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+
+.TransformControls div {
+  margin-bottom: 10px;
+}
+
+.TransformControls label, .TransformControls div > span { /* Assuming spans might be used as labels */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #b0b0b0;
+}
+
+.TransformControls input[type="number"] {
+  width: calc(100% - 22px); /* Full width minus padding/border */
+  padding: 8px 10px;
+  background-color: #1c1f26;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 5px; /* Space between inputs in a group if they wrap */
+}
+
+.TransformControls input[type="number"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
+
+.TransformControls button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease;
+}
+
+.TransformControls button:hover {
+  background-color: #0056b3;
+}
+
+/* Make individual transform inputs a bit more compact */
+.TransformControls > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px; /* Reduced margin */
+}
+.TransformControls > div > span { /* If using span labels for X, Y, Z */
+  flex-basis: 10px; /* Small fixed basis for X, Y, Z labels */
+  margin-right: 5px;
+  font-weight: bold;
+}
+.TransformControls > div > input[type="number"] {
+  flex-grow: 1;
+  width: auto; /* Override previous width */
+  margin-right: 5px; /* Space between inputs if they were on same line */
+}
+.TransformControls > div > input[type="number"]:last-child {
+  margin-right: 0;
+}
+
+
+.LoadingMessage, .SuccessMessage { /* Combined for similar styling */
+  color: #1890ff;
+  background-color: #152a40;
+  border: 1px solid #1890ff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+.SuccessMessage {
+  color: #28a745;
+  background-color: #1c3823;
+  border-color: #28a745;
+}
+
+/* General button styling */
+button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-weight: 500;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background-color: #007bff;
+  color: white;
+}
+button.primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+button.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+button.secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+button.danger {
+  background-color: #dc3545;
+  color: white;
+}
+button.danger:hover:not(:disabled) {
+  background-color: #b02a37;
+}
+button.warning {
+  background-color: #ffc107;
+  color: black;
+}
+button.warning:hover:not(:disabled) {
+  background-color: #d39e00;
+}
+
+
+/* Input and Select general styling */
+input[type="text"],
+input[type="file"],
+input[type="number"], /* Added number for consistency */
+select {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #282c34; /* Slightly lighter than darkest bg */
+  color: white;
+  margin-bottom: 10px; /* Add some space below inputs */
+  width: calc(100% - 22px); /* Account for padding and border */
+}
+input[type="text"]::placeholder,
+input[type="number"]::placeholder {
+  color: #aaa;
+}
+input[type="file"] {
+  padding: 7px; /* File inputs often look better with slightly less padding */
+}
+
+/* Section headings in Sidebar */
+.Sidebar h2, .Sidebar h3, .Sidebar h4 {
+  border-bottom: 1px solid #4a4f58;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  color: #e0e0e0;
+}
+.Sidebar h3 { font-size: 1.2em; }
+.Sidebar h4 { font-size: 1.0em; color: #c0c0c0; }
+
+
+/* Asset Library item improvements */
+.AssetLibrary li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.AssetLibrary li .asset-name {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+.AssetLibrary li button { /* Style for delete button in asset list */
+   padding: 3px 8px;
+   font-size: 0.85em;
+}
+
+/* Audio Mixer specific styles */
+.AudioMixer {
+  border-top: 1px solid #4a4f58;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+.AudioMixer h3 {
+  margin-top:0;
+}
+.AudioMixer select {
+  margin-bottom: 15px;
+}
+.AudioMixer .track-item {
+  border: 1px solid #444;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #20232a;
+}
+.AudioMixer .track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.AudioMixer .track-header .track-name {
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.AudioMixer .track-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between button and volume slider */
+}
+.AudioMixer .track-controls button {
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+.AudioMixer .track-controls input[type="range"] {
+  flex-grow: 1;
+  cursor: pointer;
+  margin: 0; /* Remove default margins */
+  width: auto; /* Override general input width */
+}
+.AudioMixer .track-controls .volume-label {
+  font-size: 0.8em;
+  min-width: 30px; /* Ensure space for 100% */
+  text-align: right;
+}
+
+/* Audio Preview Controls */
+.AudioPreviewControls {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #20232a;
+  border-radius: 4px;
+  border: 1px solid #3a3f4b;
+}
+.AudioPreviewControls h5 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+.AudioPreviewControls button {
+  margin-right: 8px;
+}
+.AudioPreviewControls button:last-child {
+  margin-right: 0;
 }
