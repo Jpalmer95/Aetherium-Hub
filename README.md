@@ -138,7 +138,73 @@ Aetherium Philosophy:
 
 Our goal is to reduce the burden of creating amazing entertainment, media, games. and immersive next generation entertainment.
 
-## Getting Started with Create React App
+---
+## Current Implemented Features (MVP - Holodeck Focus)
+
+This initial phase focuses on setting up the core application and a "Holodeck" viewer:
+
+*   **Asset Management:**
+    *   Upload 3D models (.glb, .gltf) and audio files (.mp3, .wav).
+    *   View a library of uploaded assets.
+    *   Delete assets.
+*   **Holodeck Viewer:**
+    *   A 3D canvas (using Three.js) where 3D models can be loaded and viewed.
+    *   Place, rotate, and scale objects within the 3D scene. Transforms are saved.
+    *   Basic camera controls (orbit, pan, zoom).
+*   **Audio Integration:**
+    *   Preview individual audio assets from the library.
+    *   An "Audio Mixer" panel to play multiple audio tracks concurrently with individual volume controls.
+
+---
+## Getting Started (Development)
+
+The application consists of a React frontend and a Python FastAPI backend.
+
+### Backend Setup
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+2.  **Create a virtual environment (recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+3.  **Install dependencies:**
+    The `requirements.txt` file lists all necessary Python packages.
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *Note: If you encounter issues with `pip install` via automated tools, ensure you are in the correct directory and the virtual environment is active. Manual installation may be required in some sandboxed environments.*
+
+4.  **Run the FastAPI server:**
+    ```bash
+    uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    ```
+    The backend server will typically be available at `http://localhost:8000`. It includes a `/health` endpoint for status checks and `/assets` endpoints for asset management. Uploaded files are stored in the `backend/uploads/` directory, and metadata is stored in a `aetherium.db` SQLite file created in the `backend` directory.
+
+### Frontend Setup (Create React App)
+
+The frontend is a standard Create React App.
+
+1.  **Navigate to the project root directory (if not already there).**
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Start the development server:**
+    ```bash
+    npm start
+    ```
+    This runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser. The page will reload when you make changes.
+
+    The frontend expects the backend to be running on `http://localhost:8000`. This can be configured via `REACT_APP_API_URL` environment variable if needed.
+
+---
+## Original Create React App Documentation (Below)
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
